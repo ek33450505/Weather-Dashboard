@@ -12,14 +12,22 @@
 </head>
 <body>
     <!-- Format Heading -->
-    <header>
-        <h1 class="d-block p-2 bg-primary text-white">Weather Dashboard</h1>
+    <header class="p-3 text-center bg-primary">
+        <h1>Weather Dashboard</h1>
     </header>
         <!-- Start container -->
-        <div class="container">
-            
-        </div>
-
+        <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-3 bg-light border rounded-lg" style="padding: 1.5rem;">
+                  <h3>Search for a city: </h3>
+                  <div class="input-group mb-3">
+                      <input type="text" class="form-control" placeholder="Search City Name" 
+                      <div class="input-group-append">
+                          <button class="btn btn-primary">SEARCH</button>
+                      </div>
+                  </div>
+            <!-- List saved local storage history below -->
+                  <ul id="search-history"></ul>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" 

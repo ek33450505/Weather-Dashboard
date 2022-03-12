@@ -3,12 +3,8 @@
     font-size: 1.2rem;
     line-height: 1;
     color: black;
-  }
-
-  header {
-      text-align: center;
-  }
-
-  .d-block {
-      font-size: 3rem;
-  }
+}
+ 
+header h1 {
+    color: white;
+}
