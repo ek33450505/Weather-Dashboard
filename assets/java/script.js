@@ -1,24 +1,7 @@
-// var userContainer = document.getElementById('users');
-// var fetchButton = document.getElementById('fetch-button');
+// Api key = {5332ca0f45c08fd52df6c08ea63d1aa2}
 
-// function getApi() {
-//   var requestUrl = 'https://api.github.com/users?per_page=5';
+// use this geocoding API for city search to get lat and lon cords
+http://api.openweathermap.org/geo/1.0/direct?q=${search}&limit=5&appid={}
 
-//   fetch(requestUrl)
-//     .then(function (response) {
-//       return response.json();
-//     })
-//     .then(function (data) {
-//       for (let i=0; i < data.length; i++) {
-//       let userName = document.createElement('h3');
-//       userName.textContent = data[i].login;
-      
-//       let userUrl = document.createElement('p');
-//       userUrl.textContent = data[i].url;
-
-//       userContainer.append(userName)
-//       userContainer.append(userUrl)   
-//     }
-//   });
-// }
-// fetchButton.addEventListener('click', getApi);
+//Use this API to get the weather 
+// ${weatherApiRootUrl}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly&appid={}
