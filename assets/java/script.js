@@ -1,32 +1,43 @@
-var searchFormEl = document.querySelector('#search-form');
-var formInputEl = document.querySelector('#formcontrolinput');
-var searchContainerEl = document.querySelector('#search-history'); 
+var cityInputEl = document.querySelector('#cityForm');
+var cityListEl = document.querySelector('#cityList');
+var searchBtn = document.querySelector('#button-addon'); 
 
-var searchSubmitHandler = function(event) {
+var cityContainerEl = document.querySelector("#cityName");
+var todayContainerEl = document.querySelector("#todayOutput");
+var previousSearch = document.querySelector("#cityHistory");
+var cards = document.querySelector("#card-deck")
+
+//Global Variables
+var apiKey = "5332ca0f45c08fd52df6c08ea63d1aa2";
+var citySearches = [];
+var today = moment().format("L");
+
+// Functions to control form submission
+var submitForm = function (event) {
     //prevents page from refreshing
     event.preventDefault();
-    console.log(event);
-
-  // get value from input element
-  var formcontrolinput = formInputEl.value.trim();
-
-  if (formcontrolinput) {
-    getGeocode(formcontrolinput);
-
-    // clear old content
-    searchContainerEl.textContent = '';
-    formInputEl.value = '';
-  } else {
-    alert('Please enter a city');
-  }
+    // get value from input element
+    var citySearch = cityInputEl.value.trim();
+    if (citySearch) {
+        getWeather(citySearch);
+        // clear old content
+        cityInputEl.value = '';
+    } else {
+        alert('Please enter a City');
+    }
+    citySearches.push(citySearch);
+    storeCity(citySearches);
+    renderCities();
+};
+//Function to store previous searches in local storage
+var storeCity = function() {
+    localStorage.setItem("searchCity", JSON.stringify(citySearches));
+    return;
 };
 
-var apiKey = "5332ca0f45c08fd52df6c08ea63d1aa2";
-
-var getGeocode = function(search) {
+var getWeather = function(location) {
     //format the openweather geocoding api
-    var cityName = 'columbus';
-    var apiUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=5&appid=${apiKey}`;
+    var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + location + '&appid=${apiKey}';
 
     //make a request to the Url
     fetch(apiUrl)
@@ -34,10 +45,9 @@ var getGeocode = function(search) {
             //request was sucessful
             if (response.ok) {
                 // console.log (response);
-                response.json().then(function(search) {
-                    var lat = search[0].lat;
-                    var lon = search[0].lon;
-                    getWeather(lat, lon);
+                response.json().then(function(currentData) {
+                  displayWeather(currentData, location);
+                  getForcast(currentData, location);
                 });
             } else {
                 alert('Error: Location not found')
@@ -48,25 +58,3 @@ var getGeocode = function(search) {
         });
 };
 
-var getWeather = function(lat, lon) {
-    //make a request to the url
-    var apiUrl = `http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly&appid=${apiKey}` 
-    fetch(apiUrl)
-        .then(function(response) {
-            //request was sucessful
-            if (response.ok) {
-                response.json().then(function(weatherData) {
-                    console.log(weatherData);
-                });
-            }
-        })
-}
-
-// add event listener to the search 
-searchFormEl.addEventListener('submit', searchSubmitHandler);
-
-getGeocode();
-
-getWeather();
-
-varDisplaysearch = function() {;}

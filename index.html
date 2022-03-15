@@ -20,17 +20,36 @@
             <div class="row align-items-start">
               <div class="col-5 col-sm-3 bg-light border rounded-lg">
                   <h3>Search for a city: </h3>
-                  <form id="search-form" class="input-group mb-3">
-                      <input type="text" class="form-control" id="formcontrolinput" placeholder="Search City Name" 
+                  <form class="input-group mb-3">
+                      <input type="text" class="form-control" id="cityForm" placeholder="Search City Name" 
                       <div class="input-group-append">
-                          <button class="btn btn-primary">SEARCH</button>
+                        <button class="btn btn-outline-primary searchBtn" type="button" id="button-addon">Search</button>
                         </div>
                       </form>
             <!-- List saved local storage history below -->
-                  <ul id="search-history"></ul> 
+                  <ul id="list-group cityHistory"></ul> 
             </div>
+        
+            <div class="col-10">
+                <div class="card bg-light mb-3" style="max-width: 18rem;">
+                <div class="card-header" id="cityName"></div>
+                <div class="card-body" id=todayOutput">
+                  <p class="card-text temp">Temp:</p>
+                  <p class="card-text wind">Wind:</p>
+                  <p class="card-text humidity">Humidity:</p>
+                  <p class="card-text uvIndex">UV Index:</p>
+                  <!-- <p class="card-text uvindex">UV Index:</p> -->
+                </div>
+              </div>
             </div>
-        </div>
+
+            <div class="col-12">
+              <div id="cardDeck">
+
+              </div>
+            </div>
+          </div>
+    </div> 
     
 
     </main>
