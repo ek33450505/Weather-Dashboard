@@ -1,6 +1,7 @@
 * {
     font-family: 'Kanit', sans-serif;
     color: black;
+    margin: 0;
 }
 
 body {
@@ -24,4 +25,7 @@ header h1 {
     width: 100%;
 }
 
+.container p-3 {
+    color;
+}
 
