@@ -6,10 +6,9 @@ var searchBtnEl = document.querySelector('#search-btn');
 var apiKey = "5332ca0f45c08fd52df6c08ea63d1aa2";
 var citySearches = [];
 var cityArray = [];
-// var cityInput = 'Columbus';
+var cityInput = '';
 
 // Functions to control form submission
-
 var formSubmitHandler = function(event) {
   //prevents the page from refresing 
   event.preventDefault();
@@ -18,13 +17,12 @@ var formSubmitHandler = function(event) {
   var selectedCity = cityInputEl
     .value
     .trim()
-    .toLowercase()
-    .split(' ')
-    .join(' ');
+    .toLowerCase();
 
+console.log(selectedCity);
     if (selectedCity) {
       getCoordinates(selectedCity);
-      cityInputEl.value = 'Columbus';
+      cityInputEl.value = '';
       //alert for invalid user entry
     }else {
         alert('Please enter a valid city name');
@@ -35,7 +33,7 @@ var formSubmitHandler = function(event) {
 var getCoordinates = function(city) {
   
   //format the openweather current weather API url
-  var apiUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&units=imperial&appid=${apiKey}`;
+  var apiUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`;
 
   //make a get request to the url
   fetch(apiUrl)
@@ -44,17 +42,17 @@ var getCoordinates = function(city) {
       if (response.ok) {
         response.json()
         .then(function(data) {
-          var lat = search[0].lat;
-          var lon = search[0].lon;
-          getCityForcast(city, lon, lat);
+          var lat = data[0].lat;
+          var lon = data[0].lon;
+          getCurrentForcast(city, lon, lat);
 
           if (document.querySelector('.city-list')) {
             document.querySelector('.city-list').remove();
           }
-
           //
           //
         });
+
         //Response if invalid location is not entered
       } else{
         alert('Error: Location not found');
@@ -72,11 +70,11 @@ var getCurrentForcast = function(city, lat, lon) {
   fetch(apiUrl2)
   .then(function(response) {
     if (response.ok) {
-      response.json.then(function(data) {
+      response.json().then(function(data) {
+        console.log(data);
 
         cityNameEl.textContent = `${city} (${moment().format("L")})`;
 
-        console.log(data)
         //
         //
       });
@@ -84,9 +82,7 @@ var getCurrentForcast = function(city, lat, lon) {
   })
 };
 
-//add event listener to the search form
-// searchBtnEl.addEventListener('submit', search-btn);
+// add event listener to the search form
+searchBtnEl.addEventListener('click', formSubmitHandler);
 
-getCoordinates();
-getCurrentForcast();
 varDisplaysearch = function() {;}
