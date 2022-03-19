@@ -14,7 +14,7 @@ var formSubmitHandler = function(event) {
   //prevents the page from refresing 
   event.preventDefault();
 
-  //get value from input element with error correction 
+  //get value from input element 
   var selectedCity = cityInputEl
     .value
 
@@ -34,7 +34,7 @@ var getCoordinates = function(city) {
   //format the openweather current weather API url
   var apiUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`;
 
-  //make a get request to the url
+  //make a get request to the url to pull lat and lon
   fetch(apiUrl)
     .then(function(response) {
       //request was sucessful
@@ -43,7 +43,7 @@ var getCoordinates = function(city) {
         .then(function(data) {
           var lat = data[0].lat;
           var lon = data[0].lon;
-          getCurrentForcast(city, lon, lat);
+          getCurrentForcast(city, lat, lon);
 
           if (document.querySelector('.city-list')) {
             document.querySelector('.city-list').remove();
@@ -73,12 +73,12 @@ var getCurrentForcast = function(city, lat, lon) {
         cityNameEl.textContent = `${city} (${moment().format("L")})`;
 
         currentForecast(data);
-        //
+        fiveDayForecast(data);
       });
     }
   })
 };
-
+//function for temperature data
 var displayTemp = function(element, temperature) {
   var tempEl = document.querySelector(element);
   var elementText = Math.round(temperature);
@@ -91,8 +91,12 @@ var currentForecast = function(forecast) {
   var forecastEl = document.querySelector('.city-forecast');
   forecastEl.classList.remove('hide');
 
+  var weatherIconEl = document.querySelector('#today-icon');
+  var currentIcon = forecast.current.weather[0].icon;
+  weatherIconEl.setAttribute('src', `http://openweathermap.org/img/wn/${currentIcon}.png`);
+  weatherIconEl.setAttribute('alt', forecast.current.weather[0].main)
 
-  displayTemp('#current-temp', forecast.current['temp']); //Why do these temp values seem incorrect???
+  displayTemp('#current-temp', forecast.current['temp']); 
   displayTemp('#current-feels-like', forecast.current['feels_like']);
   displayTemp('#current-high', forecast.daily[0].temp.max);
   displayTemp('#current-low', forecast.daily[0].temp.min);
@@ -119,6 +123,28 @@ var currentForecast = function(forecast) {
           break;
       case (currentUvi <=7):
           uviEl.className = 'badge badge-danger';
+  }
+};
+
+//Function to provide user with 5 day forcast
+
+var fiveDayForecast = function(forecast) { 
+    
+  for (var i = 1; i < 6; i++) {
+      var dateP = document.querySelector('#date-' + i);
+      dateP.textContent = moment().add(i, 'days').format('M/D/YYYY');
+
+      var iconImg = document.querySelector('#icon-' + i);
+      var iconCode = forecast.daily[i].weather[0].icon;
+      iconImg.setAttribute('src', `http://openweathermap.org/img/wn/${iconCode}.png`);
+      iconImg.setAttribute('alt', forecast.daily[i].weather[0].main);
+
+      displayTemp('#temp-' + i, forecast.daily[i].temp.day);
+      displayTemp('#high-' + i, forecast.daily[i].temp.max);
+      displayTemp('#low-' + i, forecast.daily[i].temp.min);
+
+      var humiditySpan = document.querySelector('#humidity-' + i);
+      humiditySpan.textContent = forecast.daily[i].humidity;
   }
 };
 
