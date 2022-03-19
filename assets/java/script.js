@@ -1,12 +1,13 @@
-var cityInputEl = document.querySelector('#city-input');
-var cityNameEl = document.querySelector('#city-name');
-var searchBtnEl = document.querySelector('#search-btn'); 
-
 //Global Variables
 var apiKey = "5332ca0f45c08fd52df6c08ea63d1aa2";
 var citySearches = [];
 var cityArray = [];
-var cityInput = '';
+
+//list of querySelectors to be used throughout script 
+var cityInputEl = document.querySelector('#city-input');
+var cityNameEl = document.querySelector('#city-name');
+var searchBtnEl = document.querySelector('#search-btn'); 
+
 
 // Functions to control form submission
 var formSubmitHandler = function(event) {
@@ -16,8 +17,6 @@ var formSubmitHandler = function(event) {
   //get value from input element with error correction 
   var selectedCity = cityInputEl
     .value
-    .trim()
-    .toLowerCase();
 
 console.log(selectedCity);
     if (selectedCity) {
@@ -49,8 +48,6 @@ var getCoordinates = function(city) {
           if (document.querySelector('.city-list')) {
             document.querySelector('.city-list').remove();
           }
-          //
-          //
         });
 
         //Response if invalid location is not entered
@@ -75,14 +72,58 @@ var getCurrentForcast = function(city, lat, lon) {
 
         cityNameEl.textContent = `${city} (${moment().format("L")})`;
 
-        //
+        currentForecast(data);
         //
       });
     }
   })
 };
 
+var displayTemp = function(element, temperature) {
+  var tempEl = document.querySelector(element);
+  var elementText = Math.round(temperature);
+  tempEl.textContent = elementText;
+};
+
+//Function displays current desired weather conditions for a given city
+var currentForecast = function(forecast) {
+    
+  var forecastEl = document.querySelector('.city-forecast');
+  forecastEl.classList.remove('hide');
+
+
+  displayTemp('#current-temp', forecast.current['temp']); //Why do these temp values seem incorrect???
+  displayTemp('#current-feels-like', forecast.current['feels_like']);
+  displayTemp('#current-high', forecast.daily[0].temp.max);
+  displayTemp('#current-low', forecast.daily[0].temp.min);
+
+  var currentConditionEl = document.querySelector('#current-condition');
+  currentConditionEl.textContent = forecast.current.weather[0].description
+
+  var currentHumidityEl = document.querySelector('#current-humidity');
+  currentHumidityEl.textContent = forecast.current['humidity'];
+
+  var currentWindEl = document.querySelector('#current-wind-speed')
+  currentWindEl.textContent = forecast.current['wind_speed'];
+
+  var uviEl = document.querySelector('#current-uvi')
+  var currentUvi = forecast.current['uvi'];
+  uviEl.textContent = currentUvi;
+
+  switch (true) {
+      case (currentUvi <= 2):
+          uviEl.className = 'badge badge-success';
+          break;
+      case (currentUvi <= 5):
+          uviEl.className = 'badge badge-warning';
+          break;
+      case (currentUvi <=7):
+          uviEl.className = 'badge badge-danger';
+  }
+};
+
+
 // add event listener to the search form
 searchBtnEl.addEventListener('click', formSubmitHandler);
 
-varDisplaysearch = function() {;}
+// varDisplaysearch = function() {;}
