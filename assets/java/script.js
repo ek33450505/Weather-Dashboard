@@ -18,7 +18,7 @@ var formSubmitHandler = function(event) {
   var selectedCity = cityInputEl
     .value
 
-console.log(selectedCity);
+// console.log(selectedCity);
     if (selectedCity) {
       getCoordinates(selectedCity);
       cityInputEl.value = '';
@@ -48,6 +48,9 @@ var getCoordinates = function(city) {
           if (document.querySelector('.city-list')) {
             document.querySelector('.city-list').remove();
           }
+
+          cityHistory(city);
+          loadPastCities();
         });
 
         //Response if invalid location is not entered
@@ -148,8 +151,61 @@ var fiveDayForecast = function(forecast) {
   }
 };
 
+//add function to display past searched cities
+var cityHistory = function(city) {
+
+  for (var i = 0; i < cityArray.length; i++) {
+      if (city === cityArray[i]) {
+          cityArray.splice(i, 1);
+      }
+  }
+
+  cityArray.push(city);
+  localStorage.setItem('cities', JSON.stringify(cityArray));
+};
+
+//Function to load cities from local storage
+var loadPastCities = function() {
+  cityArray = JSON.parse(localStorage.getItem('cities'));
+
+  if (!cityArray) {
+      cityArray = [];
+      return false;
+  } else if (cityArray.length > 5) {
+      cityArray.shift();
+  }
+
+  var recentCities = document.querySelector('#recent-cities');
+  var cityListUl = document.createElement('ul');
+  cityListUl.className = 'list-group list-group-flush city-list';
+  recentCities.appendChild(cityListUl);
+
+  for (var i = 0; i < cityArray.length; i++) {
+      var cityListItem = document.createElement('button');
+      cityListItem.setAttribute('type', 'button');
+      cityListItem.className = 'list-group-item';
+      cityListItem.setAttribute('value', cityArray[i]);
+      cityListItem.textContent = cityArray[i];
+      cityListUl.prepend(cityListItem);
+  }
+
+  var cityList = document.querySelector('.city-list');
+  cityList.addEventListener('click', selectRecentCities)
+};
+
+var selectRecentCities = function(event) {
+  var clickedCity = event.target.getAttribute('value');
+
+  getCoordinates(clickedCity);
+
+};
+
 
 // add event listener to the search form
 searchBtnEl.addEventListener('click', formSubmitHandler);
 
-// varDisplaysearch = function() {;}
+cityInputEl.addEventListener('keyup', function(event) {
+  if (event.keyCode === 13) {
+      cityBtn.click();
+  }
+});
