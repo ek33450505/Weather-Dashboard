@@ -116,7 +116,7 @@ var currentForecast = function(forecast) {
   var uviEl = document.querySelector('#current-uvi')
   var currentUvi = forecast.current['uvi'];
   uviEl.textContent = currentUvi;
-
+  //add colors to UV index 
   switch (true) {
       case (currentUvi <= 2):
           uviEl.className = 'badge badge-success';
