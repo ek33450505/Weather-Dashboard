@@ -32,7 +32,7 @@ var formSubmitHandler = function(event) {
 var getCoordinates = function(city) {
   
   //format the openweather current weather API url
-  var apiUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`;
+  var apiUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`;
 
   //make a get request to the url to pull lat and lon
   fetch(apiUrl)
